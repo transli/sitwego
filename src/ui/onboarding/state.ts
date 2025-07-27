@@ -1,4 +1,10 @@
 import { createContext, useContext } from "react";
+export type DocTypes =
+  | "idImageFront"
+  | "idImageBack"
+  | "driverLicense"
+  | "certificateOfGoodConductFromDCI"
+  | "psvBadge";
 export type ControlsContextType = {
   next: () => void;
   previous: () => void;
@@ -17,9 +23,11 @@ export type ControlsContextType = {
     color: string;
   };
   docs?: {
+    profileImage: string;
     idType: string;
     idNo: string;
-    idImageFrontAndBack: string;
+    idImageFront: string;
+    idImageBack: string;
     driverLicense: string;
     dlExpiry: string;
     certificateOfGoodConductFromDCI: string;
@@ -32,6 +40,7 @@ export type ControlsContextType = {
     psvInsuranceExpiry?: string;
   };
 };
+export type DocFormType = Pick<ControlsContextType, "docs">;
 export type OnboardingActions =
   | {
       type: "next";
@@ -101,13 +110,15 @@ export const reducer = (
       break;
     }
     case "finish": {
+      next = initialState;
       break;
     }
     case "setDocs": {
+      next.docs = act.docs;
       break;
     }
     case "setVehicleDetails": {
-      next = initialState;
+      next.vehicleDetails = act.vehicleDetails;
       break;
     }
   }
